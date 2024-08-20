@@ -4,6 +4,7 @@
     import { onMount } from 'svelte';
     import { getRequest } from '../../../lib/utilis/httpClient';
     import { writable } from 'svelte/store';
+    import toast, {Toaster} from 'svelte-french-toast';
 
     let id;
 
@@ -32,6 +33,19 @@
         const minutes = date.getMinutes();
         return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     }
+
+    const readTicket = async () => {
+        const request = await getRequest(`ticket/${id}`);
+        if(request.data!=='ticket expired') {
+            toast.success('Ticket used successfully');
+            ticket.set(request.data);
+        } else {
+            toast('Ticket expired', {
+                icon: '😭',
+            });
+            ticket.update(t => ({ ...t, expired: true }));
+        }
+    }
 </script>
 
 <main>
@@ -42,6 +56,8 @@
             <p>Created at: {new Date($ticket.createdAt).toLocaleString()}</p>
             <p>{$ticket.expired ? 'Expired' : `Expires at ${getHours($ticket.createdAt)}`}</p>
             <p>Uses: {$ticket.uses}</p>
+            <button on:click={readTicket} class="button">Use it!</button>
         </div>
     </div>
+    <Toaster/>
 </main>
