@@ -1,5 +1,12 @@
 <script>
-    import  '../../styles/main.css'
+    import '../../styles/main.css';
+    import { onMount } from 'svelte';
+
+    onMount(() => {
+        if (typeof window !== 'undefined' && !localStorage.getItem('token')) {
+            window.location.href = '/';
+        }
+    });
 </script>
 
 <main>

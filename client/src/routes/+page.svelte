@@ -1,8 +1,19 @@
 <script>
+    import { onMount } from 'svelte';
+    import toast, {Toaster} from 'svelte-french-toast';
+    import { getRequest, postRequest } from '../lib/utilis/httpClient.js'
     import '../styles/main.css'
     let username = '';
     let password = '';
 
+    const login = async () => {
+        if(!username || !password) {
+            toast.error('Please fill in both fields');
+        } else {
+            const response = await postRequest('login', { username, password });
+            console.log(response);
+        }
+    }
 </script>
 
 <main>
@@ -13,11 +24,12 @@
         <div class="form-container">
             <input class="input-field" placeholder="Username" bind:value={username}/>
             <input class="input-field" type="password" placeholder="Password" bind:value={password}/>
-            <button class="button" on:click={() => {console.log('login', {username, password})}}>Log-in</button>
+            <button class="button" on:click={login}>Log-in</button>
             <button class="button" on:click={() => {console.log('signin', {username,password})}}>Sign-in</button>
             <small class="note">Note: Passwords are not encrypted or protected in this application. Use with caution.</small>
         </div>
     </div>
+    <Toaster />
 </main>
 
 <style>
