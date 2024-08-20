@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `ticket` ADD COLUMN `expired` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `uses` INTEGER NOT NULL DEFAULT 0;
