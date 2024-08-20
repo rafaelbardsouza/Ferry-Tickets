@@ -44,9 +44,23 @@ export class TicketService {
                     })
                     return 'ticket expired';
                 } else {
+                    const ticket = await this.prisma.ticket.findUnique({
+                        where: { id: ticketId },
+                        select: { uses: true }
+                    });
+                    
+                    if (!ticket) {
+                        throw new Error('Ticket not found');
+                    }
+                    
+                    const newUses = ticket.uses + 1;
+                    
                     return this.prisma.ticket.update({
                         where: { id: ticketId },
-                        data: { uses: Ticket.uses + 1 }
+                        data: {
+                            uses: newUses,
+                            expired: newUses >= 2
+                        }
                     });
                 }
             }
