@@ -28,8 +28,20 @@ export async function postRequest(path, data) {
     return response;
 }
 
+export async function deleteRequest(path) {
+    let response = await axios
+        .delete(`${API_URL}/${path}`)
+        .then((r) => {
+            return r;
+        })
+        .catch((e) => console.log(e));
+        
+    return response;
+}
+
 export default {
     getRequest,
     postRequest,
+    deleteRequest,
     httpClient,
 }

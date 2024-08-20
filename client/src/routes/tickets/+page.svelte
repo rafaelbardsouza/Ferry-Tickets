@@ -1,6 +1,6 @@
 <script>
     import toast, {Toaster} from 'svelte-french-toast';
-    import { getRequest, postRequest } from '../../lib/utilis/httpClient';
+    import { deleteRequest, getRequest, postRequest } from '../../lib/utilis/httpClient';
     import '../../styles/main.css';
     import { onMount, tick } from 'svelte';
     import { writable } from 'svelte/store';
@@ -46,6 +46,12 @@
             tickets.update(t => [...t, newTicket]);
         });
     }
+
+    const deleteTicket = async (id) => {
+        deleteRequest(`ticket/${id}`).then(() => {
+            tickets.update(t => t.filter(ticket => ticket.id !== id));
+        });
+    }
 </script>
 
 <main>
@@ -56,7 +62,14 @@
             <h1>Hello, {$username}! 👋</h1>
             <ul class="tickets">
                 {#each $tickets as ticket, index (index)}
-                    <li><a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}<small>{ticket.expired ? 'Expired' : `Expires at ${getHours(ticket.createdAt)}`}</small></a></li>
+                    <li>
+                        <a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}
+                            <small>{ticket.expired ? 'Expired' : `Expires at ${getHours(ticket.createdAt)}`}</small>
+                        </a>
+                        {#if ticket.expired}
+                            <button on:click={() => deleteTicket(ticket.id)} class="delete">🗑️</button>
+                        {/if}
+                    </li>
                 {/each}
             </ul>
             <button on:click={createTicket} class="button">Create Ticket</button>
@@ -66,6 +79,21 @@
 </main>
 
 <style>
+    li {
+        display: flex;
+    }
+    .delete {
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        margin-left: 10px;
+        cursor: pointer;
+        &:hover {
+            transform: scale(1.5) rotate(10deg);
+            transition: transform 0.3s ease-in-out;
+        }
+    }
     .logout {
         position: absolute;
         font-weight: bolder;

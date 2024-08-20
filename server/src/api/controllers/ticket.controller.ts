@@ -1,6 +1,6 @@
 import { TicketService } from "../services/ticket.service";
 import { Prisma } from "@prisma/client";
-import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query } from "@nestjs/common";
 
 @Controller('api/ticket')
 export class TicketController {
@@ -14,6 +14,11 @@ export class TicketController {
     @Get('user')
     getTicketByUser(@Query('id') id: string) {
         return this.ticketService.getTicketByUser(id);
+    }
+
+    @Delete(':id')
+    deleteTicket(@Param('id') id: string) {
+        return this.ticketService.deleteTicket(id);
     }
 
     @Get(':id')

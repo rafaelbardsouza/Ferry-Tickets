@@ -18,6 +18,10 @@ export class TicketService {
         return this.prisma.ticket.create({ data });
     }
 
+    async deleteTicket(ticketId: string) {
+        return this.prisma.ticket.delete({ where: { id: ticketId } });
+    }
+
     async useTicket(ticketId: string) {
         const Ticket = await this.prisma.ticket.findUnique({ where: { id: ticketId } });
         if (!Ticket) {
