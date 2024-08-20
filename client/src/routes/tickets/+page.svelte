@@ -33,9 +33,16 @@
         const minutes = date.getMinutes();
         return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     }
+
+    const logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        window.location.href = '/';
+    }
 </script>
 
 <main>
+    <button class="logout" on:click={logout}>Logout</button>
     <div class="page">
         <div class="container">
             <img src="/favicon.png" alt="Ferry Tickets Logo" class="logo"/>
@@ -52,6 +59,24 @@
 </main>
 
 <style>
+    .logout {
+        position: absolute;
+        font-weight: bolder;
+        top: 10px;
+        right: 10px;
+        background-color: transparent;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 5px;
+        &:hover {
+            transition: background-color 0.3s ease-in-out;
+            background-color: white;
+            color: black;
+        }
+    }
     .page {
         display: flex;
         flex-direction: column;
