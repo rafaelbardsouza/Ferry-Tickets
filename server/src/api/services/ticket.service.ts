@@ -6,8 +6,26 @@ import { PrismaService } from "./prisma.service";
 export class TicketService {
     constructor (private prisma: PrismaService) {}
 
-    async getTicketById (ticketId: string) {
-        return this.prisma.ticket.findUnique({ where: { id: ticketId } });
+    async getTicketById(ticketId: string) {
+        const ticket = await this.prisma.ticket.findUnique({ where: { id: ticketId } });
+
+        if (!ticket) {
+            throw new Error('Ticket not found');
+        }
+
+        const currentTime = new Date();
+        const expirationTime = new Date(ticket.createdAt);
+        expirationTime.setHours(expirationTime.getHours() + 2);
+
+        if (currentTime > expirationTime) {
+            await this.prisma.ticket.update({
+                where: { id: ticketId },
+                data: { expired: true },
+            });
+            ticket.expired = true;
+        }
+
+        return ticket;
     }
 
     async getTicketByUser (userId: string) {
