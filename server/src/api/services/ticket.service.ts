@@ -6,6 +6,10 @@ import { PrismaService } from "./prisma.service";
 export class TicketService {
     constructor (private prisma: PrismaService) {}
 
+    async getTicketById (ticketId: string) {
+        return this.prisma.ticket.findUnique({ where: { id: ticketId } });
+    }
+
     async getTicketByUser (userId: string) {
         return this.prisma.ticket.findMany({ where: { userId } }); 
     }

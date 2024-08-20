@@ -6,6 +6,11 @@ import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
 export class TicketController {
     constructor (private readonly ticketService: TicketService) {}
 
+    @Get()
+    getTicketById(@Query('id') id: string) {
+        return this.ticketService.getTicketById(id);
+    }
+
     @Get('user')
     getTicketByUser(@Query('id') id: string) {
         return this.ticketService.getTicketByUser(id);

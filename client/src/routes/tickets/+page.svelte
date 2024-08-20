@@ -56,7 +56,7 @@
             <h1>Hello, {$username}! 👋</h1>
             <ul class="tickets">
                 {#each $tickets as ticket, index (index)}
-                    <li><a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}<small>{ticket.expired ? 'Expirado' : `Expira às ${getHours(ticket.createdAt)}`}</small></a></li>
+                    <li><a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}<small>{ticket.expired ? 'Expired' : `Expires at ${getHours(ticket.createdAt)}`}</small></a></li>
                 {/each}
             </ul>
             <button on:click={createTicket} class="button">Create Ticket</button>
