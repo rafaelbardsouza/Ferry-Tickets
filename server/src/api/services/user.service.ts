@@ -6,8 +6,14 @@ import { PrismaService } from "../services/prisma.service";
 export class UserService {
     constructor (private prisma: PrismaService) {}
 
-    async createUser(data: Prisma.UserCreateInput) {
-        return this.prisma.user.create({ data });
+    async createUser(username: string, password: string) {
+        const userData = await this.prisma.user.findUnique({ where: { username } });
+        if (userData) {
+            return { message: 'user already exists' };
+        } else {
+            const newUser = await this.prisma.user.create({ data: { username, password } });
+            return { message: 'user created', user: newUser };
+        }
     }
 
     async login(username: string, password: string) {

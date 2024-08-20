@@ -26,6 +26,21 @@
             }
         }
     }
+
+    const signin = async () => {
+        if(!username || !password) {
+            toast.error('Please fill in both fields');
+        } else {
+            const response = await postRequest('user/signin', {username, password});
+            if(response.data.message === "user created"){
+                toast.success('User created successfully');
+                username = '';
+                password = '';
+            } else {
+                toast.error('User already exists');
+            }
+        }
+    }
 </script>
 
 <main>
@@ -37,7 +52,7 @@
             <input class="input-field" placeholder="Username" bind:value={username}/>
             <input class="input-field" type="password" placeholder="Password" bind:value={password}/>
             <button class="button" on:click={login}>Log-in</button>
-            <button class="button" on:click={() => {console.log('signin', {username,password})}}>Sign-in</button>
+            <button class="button" on:click={signin}>Sign-in</button>
             <small class="note">Note: Passwords are not encrypted or protected in this application. Use with caution.</small>
         </div>
     </div>

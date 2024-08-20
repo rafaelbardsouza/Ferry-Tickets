@@ -6,9 +6,10 @@ import { Body, Controller, Get, Post } from "@nestjs/common";
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Post()
-    async createUser(@Body() data: Prisma.UserCreateInput) {
-        return this.userService.createUser(data);
+    @Post('signin')
+    async signin(@Body() body: { username: string, password: string }) {
+        const { username, password } = body;
+        return this.userService.createUser(username, password);
     }
 
     @Post('login')
