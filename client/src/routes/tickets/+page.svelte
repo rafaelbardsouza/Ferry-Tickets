@@ -1,12 +1,36 @@
 <script>
+    import toast, {Toaster} from 'svelte-french-toast';
+    import { getRequest } from '../../lib/utilis/httpClient';
     import '../../styles/main.css';
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
+    import { writable } from 'svelte/store';
+
+    let tickets = writable([]);
 
     onMount(() => {
         if (typeof window !== 'undefined' && !localStorage.getItem('token')) {
             window.location.href = '/';
+        } else {
+            const token = localStorage.getItem('token');
+            const getTickets = async () => {
+                try {
+                    const request = await getRequest(`ticket/user?id=${token}`);
+                    tickets.set(request.data);
+                } catch (error) {
+                    toast.error('Error fetching tickets');
+                }
+            }
+            getTickets();
         }
     });
+
+    function getHours(timestamp) {
+        const date = new Date(timestamp);
+        date.setHours(date.getHours() + 2);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+    }
 </script>
 
 <main>
@@ -14,19 +38,15 @@
         <div class="container">
             <img src="/favicon.png" alt="Ferry Tickets Logo" class="logo"/>
             <h1>Hello, Rafael! 👋</h1>
-            <p>Here are your tickets:</p>
             <ul class="tickets">
-                <li><a href="#a">🎫 ticket 1</a></li>
-                <li><a href="#a">🎫 ticket 2</a></li>
-                <li><a href="#a">🎫 ticket 3</a></li>
-                <li><a href="#a">🎫 ticket 4</a></li>
-                <li><a href="#a">🎫 ticket 5</a></li>
-                <li><a href="#a">🎫 ticket 6</a></li>
-                <li><a href="#a">🎫 ticket 7</a></li>
+                {#each $tickets as ticket, index (index)}
+                    <li><a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}<small>{ticket.expired ? 'Expirado' : `Expira às ${getHours(ticket.createdAt)}`}</small></a></li>
+                {/each}
             </ul>
             <button class="button">Create Ticket</button>
         </div>
     </div>
+    <Toaster />
 </main>
 
 <style>
@@ -61,16 +81,23 @@
 
     .tickets a {
         width: 800px;
-        height: 30px;
+        height: 50px;
         display: flex;
+        font-size: 1.3rem;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
         padding: 10px;
         margin: 5px 0;
         background: navy;
         color: #fff;
         text-decoration: none;
         border-radius: 5px;
+    }
+
+    .tickets small {
+        margin-top: .5rem;
+        color: rgba(255, 0, 0, 0.8);
     }
 
     .tickets a:hover {

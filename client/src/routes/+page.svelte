@@ -19,7 +19,7 @@
         } else {
             const response = await postRequest('user/login', {username, password});
             if(response.data.message === "login successful"){
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('token', response.data.user.id);
                 window.location.href = '/tickets';
             } else {
                 toast.error('Invalid credentials');
