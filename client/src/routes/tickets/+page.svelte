@@ -1,6 +1,6 @@
 <script>
     import toast, {Toaster} from 'svelte-french-toast';
-    import { getRequest } from '../../lib/utilis/httpClient';
+    import { getRequest, postRequest } from '../../lib/utilis/httpClient';
     import '../../styles/main.css';
     import { onMount, tick } from 'svelte';
     import { writable } from 'svelte/store';
@@ -39,6 +39,13 @@
         localStorage.removeItem('username');
         window.location.href = '/';
     }
+
+    const createTicket = async () => {
+        postRequest('ticket', {userId: localStorage.getItem('token')}).then((r) => {
+            const newTicket = r.data;
+            tickets.update(t => [...t, newTicket]);
+        });
+    }
 </script>
 
 <main>
@@ -52,7 +59,7 @@
                     <li><a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}<small>{ticket.expired ? 'Expirado' : `Expira às ${getHours(ticket.createdAt)}`}</small></a></li>
                 {/each}
             </ul>
-            <button class="button">Create Ticket</button>
+            <button on:click={createTicket} class="button">Create Ticket</button>
         </div>
     </div>
     <Toaster />
