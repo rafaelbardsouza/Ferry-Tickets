@@ -56,8 +56,20 @@
             <p>Created at: {new Date($ticket.createdAt).toLocaleString()}</p>
             <p>{$ticket.expired ? 'Expired' : `Expires at ${getHours($ticket.createdAt)}`}</p>
             <p>Uses: {$ticket.uses}</p>
-            <button on:click={readTicket} class="button">Use it!</button>
+            <div class="buttons">
+                <button on:click={readTicket} class="button">Use it!</button>
+                <button on:click={() => window.location.href = '/tickets'} class="button">Back</button>
+            </div>
         </div>
     </div>
     <Toaster/>
 </main>
+
+<style>
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
