@@ -11,8 +11,9 @@ export class UserController {
         return this.userService.createUser(data);
     }
 
-    @Get()
-    async login(@Body() data: { username: string, password: string }) {
-        return this.userService.login(data.username, data.password);
+    @Post('login')
+    async login(@Body() body: { username: string, password: string }) {
+        const { username, password } = body;
+        return this.userService.login(username, password);
     }
 }

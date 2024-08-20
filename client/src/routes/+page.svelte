@@ -1,7 +1,15 @@
 <script>
+    import { onMount } from 'svelte';
     import toast, {Toaster} from 'svelte-french-toast';
     import { getRequest, postRequest } from '../lib/utilis/httpClient.js'
     import '../styles/main.css'
+
+    onMount(() => {
+        if (localStorage.getItem('token')) {
+            window.location.href = '/tickets';
+        }
+    });
+
     let username = '';
     let password = '';
 
@@ -9,8 +17,13 @@
         if(!username || !password) {
             toast.error('Please fill in both fields');
         } else {
-            const response = await postRequest('login', { username, password });
-            console.log(response);
+            const response = await postRequest('user/login', {username, password});
+            if(response.data.message === "login successful"){
+                localStorage.setItem('token', response.data.token);
+                window.location.href = '/tickets';
+            } else {
+                toast.error('Invalid credentials');
+            }
         }
     }
 </script>
