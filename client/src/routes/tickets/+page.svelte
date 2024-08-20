@@ -6,12 +6,14 @@
     import { writable } from 'svelte/store';
 
     let tickets = writable([]);
+    let username = writable('');
 
     onMount(() => {
         if (typeof window !== 'undefined' && !localStorage.getItem('token')) {
             window.location.href = '/';
         } else {
             const token = localStorage.getItem('token');
+            username.set(localStorage.getItem('username'));
             const getTickets = async () => {
                 try {
                     const request = await getRequest(`ticket/user?id=${token}`);
@@ -37,7 +39,7 @@
     <div class="page">
         <div class="container">
             <img src="/favicon.png" alt="Ferry Tickets Logo" class="logo"/>
-            <h1>Hello, Rafael! 👋</h1>
+            <h1>Hello, {$username}! 👋</h1>
             <ul class="tickets">
                 {#each $tickets as ticket, index (index)}
                     <li><a href={`ticket/${ticket.id}`}>🎫 Ticket {index+1}<small>{ticket.expired ? 'Expirado' : `Expira às ${getHours(ticket.createdAt)}`}</small></a></li>
