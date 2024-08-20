@@ -31,20 +31,15 @@
     }
 
     .container {
-        text-align: center;
-        background: #1e1e1e;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        width: 100%;
-        max-width: 600px;
-        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .tickets {
         list-style: none;
         padding: 0;
-        max-height: 300px;
+        max-height: 500px;
         overflow-y: auto;
     }
 
@@ -58,7 +53,7 @@
     }
 
     .tickets a {
-        width: 300px;
+        width: 800px;
         height: 30px;
         display: flex;
         justify-content: center;
@@ -74,23 +69,5 @@
     .tickets a:hover {
         background-color: #3700b3;
         transition: transform 0.3s ease-in-out;
-    }
-
-    .button {
-        background-color: #3700b3;
-        color: #fff;
-        font-weight: bold;
-        width: 80%;
-        max-width: 320px;
-        margin: 10px;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .button:hover {
-        background-color: #6200ea;
     }
 </style>
