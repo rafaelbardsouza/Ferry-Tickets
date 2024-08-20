@@ -19,7 +19,14 @@ export class TicketService {
         if (!Ticket) {
             return 'ticket not found';
         } else {
-            if(Ticket.expired) {
+            const now = new Date();
+            const twoHoursAhead = new Date(Ticket.createdAt);
+            twoHoursAhead.setHours(twoHoursAhead.getHours() + 2);
+            if (now > twoHoursAhead) {
+                await this.prisma.ticket.update({
+                    where: { id: ticketId },
+                    data: { expired: true }
+                })
                 return 'ticket expired';
             } else {
                 if(Ticket.uses >= 2) {
