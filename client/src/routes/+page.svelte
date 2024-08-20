@@ -9,8 +9,13 @@
         if(!username || !password) {
             toast.error('Please fill in both fields');
         } else {
-            const response = await postRequest('login', { username, password });
-            console.log(response);
+            const response = await postRequest('user/login', {username, password});
+            if(response.error) {
+                toast.error(response.error);
+            } else {
+                localStorage.setItem('token', response.data.user.id);
+                window.location.href = '/tickets';
+            }
         }
     }
 </script>

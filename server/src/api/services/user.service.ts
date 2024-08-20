@@ -13,12 +13,12 @@ export class UserService {
     async login(username: string, password: string) {
         const userData = await this.prisma.user.findUnique({ where: { username } });
         if (!userData) {
-            return 'user not found';
+            return { message: 'user not found' };
         } else {
             if (userData.password === password) {
-                return userData;
+                return { message: 'login successful', user: userData };
             } else {
-                return 'incorrect password';
+                return { message: 'incorrect password' };
             }
         }
     }
